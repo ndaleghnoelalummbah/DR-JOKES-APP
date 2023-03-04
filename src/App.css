@@ -1,7 +1,8 @@
 .App {
   text-align: center;
+  width: 100%;
   background-color: antiquewhite;
-  padding: 6px;
+  padding: 2%;
 }
 .text {
   text-align: center;
@@ -24,12 +25,18 @@ select {
   border-radius: 24px;
 }
 .inputContainers {
-  height: 60px;
+  height: 50px;
   display: block;
-  margin: 18px auto;
-  width: 500px;
+  margin: 12px auto;
+  width: 80%;
   border-radius: 20px;
   text-align: center;
+}
+textarea{
+padding-top:14px ;
+}
+input{
+  border: 1px solid #adabab;
 }
 .addname {
   display: flex;
@@ -37,28 +44,93 @@ select {
   width: 300px;
   justify-content: space-between;
 }
-.addmore {
-  display: flex;
-  align-items: center;
-  width: 300px;
-  justify-content: space-between;
+.addcat {
+  width: 30%;
+   margin: 0 auto;
+  
 }
 .plus {
-  width: 76px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
+ margin-left: 94%;
+ 
   border-radius: 50%;
+ margin-top: -70px;
   background-color: #fcd1e5;
+}
+.indicator{
+  width: 100px;
+  padding: "10px 26px";
+  margin-left:92%; 
+  border-radius: 8px }
+.addJoke {
+  background-color: #ffff;
+  position: absolute;
+  height: 78%;
+  width: 30%;
+  z-index: 1040;
+  top: 25%;
+  left: 35%;
+
+  padding: 18px;
+  box-shadow: 2px 2px  4px #79377a;
+}
+.close{
+  color: red;
+  width: fit-content;
+    margin-left: 90%;
+    height: 40px; 
+    background-color: #c8eef4;
+    border-radius: 4px;
+     width: 40px;
 }
 footer {
   background-color: #aaaab7;
   height: 200px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* @media only screen  and (max-width: 1024px){ */
+/* .container{
+  width:45%;
+} */
+/* .addJoke{
+  width:70%;
+  left:15%;
+  
+}
+}
+@media only screen  and (max-width: 415px){
+.addJoke{
+  width:70%;
+  left:15%;
+   background-color: #aaaab7;
+  
+}
+} */
+  @media only screen and (max-width: 1024px) {
+   .plus{
+    margin-left: 92%;
+  }
+  .indicator{
+    margin-left: 88%;
   }
 }
+@media only screen and (max-width: 640px) { 
+/* For mobile phones: */
+.addJoke {
+    width: 80%;
+    left: 10%;
+  }
+  .addcat{
+    width: 80%;
+  }
+  .plus{
+    margin-left: 84%;
+  }
+  .indicator{
+    margin-left: 74%;
+  }
+  } 
 
 .App-header {
   background-color: #282c34;
@@ -71,15 +143,3 @@ footer {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

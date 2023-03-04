@@ -1,70 +1,70 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Joke.module.css";
+import CommentCard from "../CommentCard/CommentCard";
 import axios from "axios";
 import Modal from "react-overlays/Modal";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
+
 export default function Joke(props) {
   const [commentArray, setCommentArray] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [commentData, setCommentData] = useState({
-    comment: "",
-    joke_id: "",
-  });
+  const [commentData, setCommentData] = useState("");
   const [commentList, setCommentList] = useState([]);
+  const [commentButton, setCommentButton] = useState("comment");
+  const [commentText, setCommentText] = useState("");
+  const [commenting, setCommenting] = useState(false);
   function handleCommentData(e) {
-    setCommentData({
-      ...commentData,
-      [e.target.name]: e.target.value,
-    });
+    setCommentData(e.target.value);
   }
   function handleAddComment(e) {
     e.preventDefault();
+    setCommenting(true);
     const commentInfo = {
-      joke_id: commentData.joke_id,
-      comment: commentData.comment,
+      joke_id: props.id,
+      comment: commentData,
     };
     axios
       .post("https://api.jokes.digitalrenter.com/api/comments", commentInfo)
       .then((response) => {
         console.log(response.status, response.data);
-        //alert("comment sucessfully submitted");
+        alert("comment sucessfully submitted");
+        props.onNewComment(response);
+        setCommentData("");
       })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-          console.log("server responded");
-        } else if (error.request) {
-          console.log("network error");
-        } else {
-          console.log(error);
-        }
-      });
+      //console.log(props.comments)
+
+      .finally((fin) => setCommenting(false));
+    console.log(props.comments);
   }
 
-  function commentFunc() {
-    setCommentList(() => {
-      fetch(`https://api.jokes.digitalrenter.com/api/comments?joke_id=${props.id}`)
-        .then((res) => res.json())
-        .then((data) => setCommentArray(data));
-      return commentArray.map((items) => {
-        return (
-          <p>
-            {items.joke_id}: {items.comment}
-          </p>
-        );
-      });
-    });
+  function handleComment(id) {
+    setShowModal(true);
+    // fetch(`https://api.jokes.digitalrenter.com/api/comments?joke_id=${props.id}`)
+    //   .then((res) => res.json())
+    //   .then((data) => setCommentArray(data));
+    //  setCommentList(() => {
+    //   return commentArray.map((items) => <blockquote>*** {items.comment}</blockquote>);
+    //  });
   }
-
-  let text = "";
-  if (props.like > 10) {
-    text = "so funny";
-  } else if (props.like > 4) {
-    text = "funny";
-  }
+  // const onAddComment = () => {
+  //   if (commenting === true) {
+  //     setCommentButton("commenting ...");
+  //     //setCommentText(commentData);
+  //   }
+  // else{
+  //   setCommentText("")
+  // }
+  // };
+  // let text = "";
+  // if (props) {
+  //   text = "so funny";
+  // } else if (props.like > 4) {
+  //   text = "funny";
+  // }
 
   let more = "...see more";
   const [startText, setStartText] = useState(props.setup.slice(0, 40));
@@ -79,25 +79,22 @@ export default function Joke(props) {
       {more}
     </span>
   );
-  function handleComment() {
-    setShowModal(true);
-    commentFunc();
-  }
+  // function handleComment() {
+  //   setShowModal(true);
+  //   commentFunc();
+  // }
   function handleClose() {
     setShowModal(false);
   }
-  let handleSaveComments = () => {
-    alert("comment saved succesfully");
-  };
+  // let handleSaveComments = () => {
+  //   alert("comment saved succesfully");
+  // };
   const renderBackdrop = (props) => <div className="backdrop" {...props} />;
 
   return (
     <div className={styles.container}>
       <div className={styles.text}>
-        <div style={{ display: props.like > 4 ? "block" : "none" }} className={styles.likes}>
-          {/* {text} */}
-        </div>
-        <h3>id:{props.id}</h3>
+        <div style={{ display: props.like > 4 ? "block" : "none" }} className={styles.likes}></div>
         <h3 style={{ display: props.punchline ? "block" : "none" }}>{props.punchline}</h3>
         <>
           {shortText}
@@ -106,14 +103,14 @@ export default function Joke(props) {
       </div>
       <div className={styles.icons}>
         <div className={styles.reaction}>
-          <FontAwesomeIcon onClick={props.hateJoke} icon={faThumbsDown} style={{ height: "30px", color: "orange" }} />
+          <FontAwesomeIcon onClick={props.hateJoke} icon={faThumbsDown} style={{ height: "20px", color: "orange" }} />
           <span style={{ marginLeft: "8px" }}>{props.dislike} dislikes</span>
         </div>
         <div className={styles.reaction}>
-          <FontAwesomeIcon onClick={props.likeJoke} icon={faThumbsUp} style={{ height: "30px", color: "orange" }} /> <span style={{ marginLeft: "6px" }}>{props.like} likes</span>
+          <FontAwesomeIcon onClick={props.likeJoke} icon={faThumbsUp} style={{ height: "20px", color: "orange" }} /> <span style={{ marginLeft: "6px" }}>{props.like} likes</span>
         </div>
         <div>
-          <FontAwesomeIcon onClick={handleComment} icon={faComment} style={{ height: "30px", opacity: "0.4" }} />
+          <FontAwesomeIcon onClick={handleComment} icon={faComment} style={{ height: "20px", opacity: "0.4" }} />
         </div>
         {/* <FontAwesomeIcon icon={faCoffee} /> */}
       </div>
@@ -121,25 +118,29 @@ export default function Joke(props) {
         <Modal className={styles.modal} show={showModal} onHide={handleClose} renderBackdrop={renderBackdrop}>
           <div>
             <div className={styles.modalHeader}>
-              <div className={styles.modalTitle}>make your comments here</div>
+              <div className={styles.modalTitle}>
+                <FontAwesomeIcon onClick={handleClose} className={styles.close} icon={faTimes} />
+                <h3 style={{ margin: " 0px 0px 20px 0px" }}>make your comments here</h3>
+              </div>
             </div>
             <div className={styles.modalDesc}>
-              <form onSubmit={handleAddComment}>
-                <textarea className={styles.inputContainers} type="text" name="comment" onChange={handleCommentData} value={commentData.comment} placeholder="Write your comment" />
-                <div style={{ margin: "14px auto", width: "300px" }}>
-                  <input style={{ height: "50px", borderRadius: "16px" }} type="text" name="joke_id" onChange={handleCommentData} value={commentData.joke_id} placeholder="Enter the joke id" />
-                  <button type="submit" style={{ padding: "12px 22px", borderRadius: "4px", marginLeft: "34px" }} onClick={handleSaveComments}>
-                    submit
-                  </button>
-                </div>
+              <form className={styles.comment} onSubmit={handleAddComment}>
+                <textarea className={styles.inputContainers} type="text" name="comment" onChange={handleCommentData} value={commentData} placeholder="Write your comment" />
+                {/* <div style={{ margin: "14px auto", width: "300px" }}> */}
+                {/* <input style={{ height: "50px", borderRadius: "16px",fontSize:"18px" }} type="text" name="joke_id" onChange={handleCommentData} value={commentData.joke_id} placeholder="Enter the joke id" /> */}
+                <button type="submit" className={styles.primaryButton}>
+                  {commenting ? "commenting" : "comment"}
+                </button>
+                {/* </div> */}
               </form>
-              <div style={{ backgroundColor: "white", overflowX: "auto", height: "130px", margin: "4px" }}>{commentList}</div>
+              <div style={{ height: "250px", overflow: "auto", margin: "4px" }}>
+                {/* <blockquote style={{ display: commenting ? "block" : "none" }}>*** {commentData}</blockquote> */}
+                {props.comments.map((val) => {
+                  return <CommentCard {...val} />;
+                })}
+              </div>
             </div>
-            <div className={styles.modalFooter}>
-              <button className={styles.secondaryButton} onClick={handleClose}>
-                Close
-              </button>
-            </div>
+            
           </div>
         </Modal>
       </div>

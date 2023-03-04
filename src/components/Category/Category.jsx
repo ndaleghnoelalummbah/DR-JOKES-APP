@@ -65,6 +65,7 @@ export default function Category(props) {
   //   },
   //   {
   //     id: 5,
+
   //     value: "Emotional",
   //     text: "emotional joke",
   //     img: <img src={redheart} height="30" width="40px" />,
@@ -73,12 +74,11 @@ export default function Category(props) {
   // const [selectedOption, setSelectedOption] = useState(props.selectedCategory);
   const [selected, setSelected] = useState("");
   const handleChange = (e) => {
-    setSelected(e);
-
+    setSelected(e);  
     props.setSelectedCategory({ id: e.id, name: e.value });
   };
   return (
-    <div style={{ width: "400px", margin: "0 auto" }}>
+    <div style={{width:"80%",backgroundColor:"ActiveBorder", margin: "20px auto" }}>
       <Select
         placeholder="Select a Joke Category"
         value={selected}
