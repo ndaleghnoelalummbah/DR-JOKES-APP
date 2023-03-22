@@ -17,6 +17,8 @@ export default function Joke(props) {
   const [commentButton, setCommentButton] = useState("comment");
   const [commentText, setCommentText] = useState("");
   const [commenting, setCommenting] = useState(false);
+  const [dislike, setDislike] = useState(0);
+  const [like, setLike] = useState(0);
   function handleCommentData(e) {
     setCommentData(e.target.value);
   }
@@ -65,20 +67,13 @@ export default function Joke(props) {
   // } else if (props.like > 4) {
   //   text = "funny";
   // }
-
-  let more = "...see more";
-  const [startText, setStartText] = useState(props.setup.slice(0, 40));
-  function completeText() {
-    setStartText(() => {
-      return props.setup;
-    });
+  function hates() {
+    setDislike((prev) => prev + 1);
   }
-  let shortText = <span>{startText}</span>;
-  let moreText = (
-    <span onClick={completeText} style={{ display: props.setup.length < 40 || startText === props.setup ? "none" : "block", color: "#7644ef" }}>
-      {more}
-    </span>
-  );
+  function likes() {
+    setLike((prev) => prev + 1);
+  }
+  
   // function handleComment() {
   //   setShowModal(true);
   //   commentFunc();
@@ -96,18 +91,15 @@ export default function Joke(props) {
       <div className={styles.text}>
         <div style={{ display: props.like > 4 ? "block" : "none" }} className={styles.likes}></div>
         <h3 style={{ display: props.punchline ? "block" : "none" }}>{props.punchline}</h3>
-        <>
-          {shortText}
-          {moreText}
-        </>
+        <p>{props.setup}</p>
       </div>
       <div className={styles.icons}>
         <div className={styles.reaction}>
-          <FontAwesomeIcon onClick={props.hateJoke} icon={faThumbsDown} style={{ height: "20px", color: "orange" }} />
-          <span style={{ marginLeft: "8px" }}>{props.dislike} dislikes</span>
+          <FontAwesomeIcon onClick={hates} icon={faThumbsDown} style={{ height: "20px", color: "orange" }} />
+          <span style={{ marginLeft: "8px", display: dislike !== 0 ? "block" : "none" }}>{dislike}</span>
         </div>
         <div className={styles.reaction}>
-          <FontAwesomeIcon onClick={props.likeJoke} icon={faThumbsUp} style={{ height: "20px", color: "orange" }} /> <span style={{ marginLeft: "6px" }}>{props.like} likes</span>
+          <FontAwesomeIcon onClick={likes} icon={faThumbsUp} style={{ height: "20px", color: "orange" }} /> <span style={{ marginLeft: "6px", display: like !== 0 ? "block" : "none" }}>{like}</span>
         </div>
         <div>
           <FontAwesomeIcon onClick={handleComment} icon={faComment} style={{ height: "20px", opacity: "0.4" }} />
@@ -120,10 +112,12 @@ export default function Joke(props) {
             <div className={styles.modalHeader}>
               <div className={styles.modalTitle}>
                 <FontAwesomeIcon onClick={handleClose} className={styles.close} icon={faTimes} />
+
                 <h3 style={{ margin: " 0px 0px 20px 0px" }}>make your comments here</h3>
               </div>
             </div>
             <div className={styles.modalDesc}>
+              <p style={{ display: commenting ? "block" : "none", color: "bue" }}>submiting comment.....</p>
               <form className={styles.comment} onSubmit={handleAddComment}>
                 <textarea className={styles.inputContainers} type="text" name="comment" onChange={handleCommentData} value={commentData} placeholder="Write your comment" />
                 {/* <div style={{ margin: "14px auto", width: "300px" }}> */}
@@ -133,14 +127,13 @@ export default function Joke(props) {
                 </button>
                 {/* </div> */}
               </form>
-              <div style={{ height: "250px", overflow: "auto", margin: "4px" }}>
+              <div style={{ height: "280px", overflow: "auto", margin: "4px" }}>
                 {/* <blockquote style={{ display: commenting ? "block" : "none" }}>*** {commentData}</blockquote> */}
                 {props.comments.map((val) => {
                   return <CommentCard {...val} />;
                 })}
               </div>
             </div>
-            
           </div>
         </Modal>
       </div>

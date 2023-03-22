@@ -74,12 +74,13 @@ export default function Category(props) {
   // const [selectedOption, setSelectedOption] = useState(props.selectedCategory);
   const [selected, setSelected] = useState("");
   const handleChange = (e) => {
-    setSelected(e);  
+    setSelected(e);
     props.setSelectedCategory({ id: e.id, name: e.value });
   };
   return (
-    <div style={{width:"80%",backgroundColor:"ActiveBorder", margin: "20px auto" }}>
+    <div style={{ width: "80%", backgroundColor: "black", margin: "20px auto" }}>
       <Select
+        style={{ backgroundColor: "#0000" }}
         placeholder="Select a Joke Category"
         value={selected}
         options={categoryArray}

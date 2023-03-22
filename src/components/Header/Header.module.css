@@ -1,20 +1,23 @@
-nav{
-    background-color: #35272e;
-       display: flex;
+header{
+    top:0;
+    position: -webkit-sticky;
 }
-ul{
-    display: flex;
+nav {
+   background-color: #563344;
+  display: flex;
 }
-li{
-    list-style: none;
-    padding: 6px 36px;
-     /* display: flex; */
-     color: #ffff;
-     font-size: xx-large;
-     font-weight: bolder;
+ul {
+  display: flex;
 }
-img{
-    
-    border-radius: 50% 50%;
-    margin-left: 10px;
+li {
+  list-style: none;
+  padding: 6px 36px;
+  /* display: flex; */
+  color: #ffff;
+  font-size: xx-large;
+  font-weight: bolder;
+}
+img {
+  border-radius: 50% 50%;
+  margin-left: 10px;
 }
